@@ -114,7 +114,7 @@ class TabletControlsTemperature extends IPSModule {
 	
 		switch ($Ident) {
 		
-			case "Status":
+			case "Temperatur":
 				if ($Value == 0) {
 					
 					$currentValue = GetValue($this->ReadPropertyInteger("SourceVariable"));
