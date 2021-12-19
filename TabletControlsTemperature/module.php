@@ -33,7 +33,7 @@ class TabletControlsTemperature extends IPSModule {
 		IPS_CreateVariableProfile($variableProfileTabCtrlTemperature, 2);
 		IPS_SetVariableProfileIcon($variableProfileTabCtrlTemperature, "Temperature");
 		IPS_SetVariableProfileAssociation($variableProfileTabCtrlTemperature, 0, "-", "", -1);
-		IPS_SetVariableProfileAssociation($variableProfileTabCtrlTemperature, 1, "%f °C", "", -1);
+		IPS_SetVariableProfileAssociation($variableProfileTabCtrlTemperature, 1, "%2.0f °C", "", -1);
 		IPS_SetVariableProfileAssociation($variableProfileTabCtrlTemperature, 100, "+", "", -1);
 		
 		// Variables
@@ -119,14 +119,23 @@ class TabletControlsTemperature extends IPSModule {
 					
 					$currentValue = GetValue($this->ReadPropertyInteger("SourceVariable"));
 					$newValue = $currentValue - 1;
+					
+					$this->LogMessage("Request to lower temperature from $currentValue to $newValue","DEBUG");
+					
 					RequestAction($this->ReadPropertyInteger("SourceVariable"), $newValue);
+					break;
 				}
 				if ($Value == 100) {
 					
 					$currentValue = GetValue($this->ReadPropertyInteger("SourceVariable"));
 					$newValue = $currentValue + 1;
+					
+					$this->LogMessage("Request to lower temperature from $currentValue to $newValue","DEBUG");
+					
 					RequestAction($this->ReadPropertyInteger("SourceVariable"), $newValue);
+					break;
 				}
+				$this->LogMessage("Click on current Termpature. Ignoring.","DEBUG");
 				break;
 			default:
 				$this->LogMessage("An undefined compare mode was used","CRIT");
