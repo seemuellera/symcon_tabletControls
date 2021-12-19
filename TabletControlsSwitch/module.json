@@ -1,0 +1,14 @@
+{
+  "id": "{AE12BD4B-77CC-4FD6-83BA-DD7C36E2B8A2}",
+  "name": "TabletControlsSwitch",
+  "type": 3,
+  "vendor": "Andreas Seemueller",
+  "aliases": 
+  [
+	  "TabletControlsSwitch"
+  ],
+  "parentRequirements": [],
+  "childRequirements": [],
+  "implemented": [],
+  "prefix": "TABCTRLSWITCH"
+}
