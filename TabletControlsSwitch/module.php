@@ -24,8 +24,19 @@ class TabletControlsSwitch extends IPSModule {
 		$this->RegisterPropertyInteger("RefreshInterval",0);
 		$this->RegisterPropertyInteger("SourceVariable",0);
 		
+		// Variable profiles
+		$variableProfileTabCtrlSwitch = "TABCTRL.Switch";
+		if (IPS_VariableProfileExists($variableProfileTabCtrlSwitch) ) {
+		
+			IPS_DeleteVariableProfile($variableProfileTabCtrlSwitch);
+		}			
+		IPS_CreateVariableProfile($variableProfileTabCtrlSwitch, 0);
+		IPS_SetVariableProfileIcon($variableProfileTabCtrlSwitch, "Power");
+		IPS_SetVariableProfileAssociation($variableProfileTabCtrlSwitch, 1, "An", "", 0x00FF00);
+		IPS_SetVariableProfileAssociation($variableProfileTabCtrlSwitch, 0, "Aus", "", -1);
+		
 		// Variables
-		$this->RegisterVariableBoolean("Status","Status","~Switch");
+		$this->RegisterVariableBoolean("Status","Status",$variableProfileTabCtrlSwitch);
 		
 		//Actions
 		$this->EnableAction("Status");
