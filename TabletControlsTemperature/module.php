@@ -135,7 +135,7 @@ class TabletControlsTemperature extends IPSModule {
 	
 	public function RefreshInformation() {
 
-		SetValue($this->GetIdForIdent("Temperature"), GetValue($this->ReadPropertyInteger("SourceVariable") ) );
+		SetValue($this->GetIdForIdent("Temperatur"), GetValue($this->ReadPropertyInteger("SourceVariable") ) );
 	}
 	
 	public function MessageSink($TimeStamp, $SenderId, $Message, $Data) {
