@@ -1,0 +1,14 @@
+{
+  "id": "{95A1A653-242D-405E-93CA-50A3A1E3145B}",
+  "name": "TabletControlsTemperature",
+  "type": 3,
+  "vendor": "Andreas Seemueller",
+  "aliases": 
+  [
+	  "TabletControlsTemperature"
+  ],
+  "parentRequirements": [],
+  "childRequirements": [],
+  "implemented": [],
+  "prefix": "TABCTRLTEMPERATURE"
+}
