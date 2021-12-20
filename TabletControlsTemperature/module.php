@@ -32,9 +32,9 @@ class TabletControlsTemperature extends IPSModule {
 		}			
 		IPS_CreateVariableProfile($variableProfileTabCtrlTemperature, 2);
 		IPS_SetVariableProfileIcon($variableProfileTabCtrlTemperature, "Temperature");
-		IPS_SetVariableProfileAssociation($variableProfileTabCtrlTemperature, 0, "&nbsp;-&nbsp;", "", -1);
+		IPS_SetVariableProfileAssociation($variableProfileTabCtrlTemperature, 0, "-", "", -1);
 		IPS_SetVariableProfileAssociation($variableProfileTabCtrlTemperature, 1, "%2.0f °C", "", -1);
-		IPS_SetVariableProfileAssociation($variableProfileTabCtrlTemperature, 100, "&nbsp;+&nbsp;", "", -1);
+		IPS_SetVariableProfileAssociation($variableProfileTabCtrlTemperature, 100, "+", "", -1);
 		
 		// Variables
 		$this->RegisterVariableFloat("Temperatur","Temperatur",$variableProfileTabCtrlTemperature);
