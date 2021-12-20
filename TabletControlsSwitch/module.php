@@ -23,6 +23,7 @@ class TabletControlsSwitch extends IPSModule {
 		$this->RegisterPropertyBoolean("DebugOutput",false);
 		$this->RegisterPropertyInteger("RefreshInterval",0);
 		$this->RegisterPropertyInteger("SourceVariable",0);
+		$this->RegisterPropertyBoolean("ReadOnly",false);
 		
 		// Variable profiles
 		$variableProfileTabCtrlSwitch = "TABCTRL.Switch";
@@ -38,9 +39,6 @@ class TabletControlsSwitch extends IPSModule {
 		// Variables
 		$this->RegisterVariableBoolean("Status","Status",$variableProfileTabCtrlSwitch);
 		
-		//Actions
-		$this->EnableAction("Status");
-
 		// Timer
 		$this->RegisterTimer("RefreshInformation", 0 , 'TABCTRLSWITCH_RefreshInformation($_IPS[\'TARGET\']);');
     }
@@ -63,6 +61,7 @@ class TabletControlsSwitch extends IPSModule {
 		$form['elements'][] = Array("type" => "NumberSpinner", "name" => "RefreshInterval", "caption" => "Refresh Interval");
 		$form['elements'][] = Array("type" => "CheckBox", "name" => "DebugOutput", "caption" => "Enable Debug Output");
 		$form['elements'][] = Array("type" => "SelectVariable", "name" => "SourceVariable", "caption" => "Source Variable");
+		$form['elements'][] = Array("type" => "CheckBox", "name" => "ReadOnly", "caption" => "Read Only (No action assigned)");
 
 				
 		// Add the buttons for the test center
@@ -83,6 +82,17 @@ class TabletControlsSwitch extends IPSModule {
 		// Register Variables
 		$this->RegisterMessage($this->ReadPropertyInteger("SourceVariable"), VM_UPDATE);
 		$this->RegisterReference($this->ReadPropertyInteger("SourceVariable"));
+
+		//Actions
+		if (! $this->ReadPropertyBoolean("ReadOnly") ) {
+		
+			$this->EnableAction("Status");
+		}
+		else {
+			
+			$this->DisableAction("Status");
+		}
+
 		
 		// Diese Zeile nicht löschen
 		parent::ApplyChanges();
