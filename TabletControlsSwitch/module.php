@@ -124,7 +124,7 @@ class TabletControlsSwitch extends IPSModule {
 		switch ($Ident) {
 		
 			case "Status":
-				RequestAction($this->ReadPropertyInteger("SourceVariable"), $Value);
+				$this->RequestActionWithBackOff($this->ReadPropertyInteger("SourceVariable"), $Value);
 				break;
 			default:
 				$this->LogMessage("An undefined compare mode was used","CRIT");
@@ -141,5 +141,40 @@ class TabletControlsSwitch extends IPSModule {
 		$this->LogMessage("$TimeStamp - $SenderId - $Message - " . implode(" ; ",$Data), "DEBUG");
 		
 		$this->RefreshInformation();
+	}
+	
+	// Version 1.0
+	protected function RequestActionWithBackOff($variable, $value) {
+		
+		$retries = 4;
+		$baseWait = 200;
+		
+		for ($i = 0; $i <= $retries; $i++) {
+			
+			$wait = $baseWait * $i;
+			
+			if ($wait > 0) {
+				
+				$this->LogMessage("Waiting for $wait milliseconds, retry $i of $retries", "DEBUG");
+				IPS_Sleep($wait);
+			}
+			
+			$result = RequestAction($variable, $value);
+			
+			// Return success if executed successfully
+			if ($result) {
+				
+				return true;
+			}
+			else {
+				
+				$this->LogMessage("Switching Variable $variable to Value $value failed, but will be retried", "WARN");
+			}
+			
+		}
+		
+		// return false as switching was not possible after all these times
+		$this->LogMessage("Switching Variable $variable to Value $value failed after $retries retries. Aborting", "CRIT");
+		return false;
 	}
 }
