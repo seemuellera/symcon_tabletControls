@@ -21,6 +21,7 @@ class TabletControlsTemperature extends IPSModule {
 		// Properties
 		$this->RegisterPropertyString("Sender","TabletControlsTemperature");
 		$this->RegisterPropertyBoolean("DebugOutput",false);
+		$this->RegisterPropertyBoolean("EmulateStatus",false);
 		$this->RegisterPropertyInteger("RefreshInterval",0);
 		$this->RegisterPropertyInteger("SourceVariable",0);
 		
@@ -64,6 +65,7 @@ class TabletControlsTemperature extends IPSModule {
 		$form['elements'][] = Array("type" => "NumberSpinner", "name" => "RefreshInterval", "caption" => "Refresh Interval");
 		$form['elements'][] = Array("type" => "CheckBox", "name" => "DebugOutput", "caption" => "Enable Debug Output");
 		$form['elements'][] = Array("type" => "SelectVariable", "name" => "SourceVariable", "caption" => "Source Variable");
+		$form['elements'][] = Array("type" => "CheckBox", "name" => "EmulateStatus", "caption" => "Emulate Status");
 
 				
 		// Add the buttons for the test center
@@ -117,20 +119,44 @@ class TabletControlsTemperature extends IPSModule {
 			case "Temperatur":
 				if ($Value == 0) {
 					
-					$currentValue = GetValue($this->ReadPropertyInteger("SourceVariable"));
+					if (! $this->ReadPropertyBoolean("EmulateStatus") ) {
+						
+						$currentValue = GetValue($this->ReadPropertyInteger("SourceVariable"));
+					}
+					else {
+						
+						$currentValue = GetValue($this->GetIDForIdent("Temperatur") );
+					}
 					$newValue = $currentValue - 1;
 					
 					$this->LogMessage("Request to lower temperature from $currentValue to $newValue","DEBUG");
+					
+					if ($this->ReadPropertyBoolean("EmulateStatus") ) { 
+					
+						SetValue($this->GetIdForIdent("Temperatur"), $newValue);
+					}
 					
 					RequestAction($this->ReadPropertyInteger("SourceVariable"), $newValue);
 					break;
 				}
 				if ($Value == 100) {
 					
-					$currentValue = GetValue($this->ReadPropertyInteger("SourceVariable"));
+					if (! $this->ReadPropertyBoolean("EmulateStatus") ) {
+						
+						$currentValue = GetValue($this->ReadPropertyInteger("SourceVariable"));
+					}
+					else {
+						
+						$currentValue = GetValue($this->GetIDForIdent("Temperatur") );
+					}
 					$newValue = $currentValue + 1;
 					
 					$this->LogMessage("Request to lower temperature from $currentValue to $newValue","DEBUG");
+
+					if ($this->ReadPropertyBoolean("EmulateStatus") ) { 
+					
+						SetValue($this->GetIdForIdent("Temperatur"), $newValue);
+					}
 					
 					RequestAction($this->ReadPropertyInteger("SourceVariable"), $newValue);
 					break;
