@@ -139,7 +139,7 @@ class TabletControlsSwitch extends IPSModule {
 
 		if ($this->GetIdForIdent("Status") != 1) {
 			
-			if (GetValue($this->ReadPropertyInteger("SourceVariable") ) {
+			if (GetValue($this->ReadPropertyInteger("SourceVariable")) ) {
 				
 				SetValue($this->GetIDForIdent("Status"), 100);
 			}
@@ -157,7 +157,7 @@ class TabletControlsSwitch extends IPSModule {
 			
 			if ($variableLastUpdated < $threshold) {
 				
-				if (GetValue($this->ReadPropertyInteger("SourceVariable") ) {
+				if (GetValue($this->ReadPropertyInteger("SourceVariable")) ( {
 					
 					SetValue($this->GetIDForIdent("Status"), 100);
 				}
