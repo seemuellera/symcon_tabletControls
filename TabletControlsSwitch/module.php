@@ -31,13 +31,14 @@ class TabletControlsSwitch extends IPSModule {
 		
 			IPS_DeleteVariableProfile($variableProfileTabCtrlSwitch);
 		}			
-		IPS_CreateVariableProfile($variableProfileTabCtrlSwitch, 0);
+		IPS_CreateVariableProfile($variableProfileTabCtrlSwitch, 1);
 		IPS_SetVariableProfileIcon($variableProfileTabCtrlSwitch, "Power");
-		IPS_SetVariableProfileAssociation($variableProfileTabCtrlSwitch, 1, "An", "", 0x00FF00);
+		IPS_SetVariableProfileAssociation($variableProfileTabCtrlSwitch, 100, "An", "", 0x00FF00);
+		IPS_SetVariableProfileAssociation($variableProfileTabCtrlSwitch, 99, "", "", 0xFFA500);
 		IPS_SetVariableProfileAssociation($variableProfileTabCtrlSwitch, 0, "Aus", "", -1);
 		
 		// Variables
-		$this->RegisterVariableBoolean("Status","Status",$variableProfileTabCtrlSwitch);
+		$this->RegisterVariableInteger("Status","Status",$variableProfileTabCtrlSwitch);
 		
 		// Timer
 		$this->RegisterTimer("RefreshInformation", 0 , 'TABCTRLSWITCH_RefreshInformation($_IPS[\'TARGET\']);');
@@ -124,8 +125,10 @@ class TabletControlsSwitch extends IPSModule {
 		switch ($Ident) {
 		
 			case "Status":
-				SetValue($this->GetIDForIdent($Ident), $Value);
-				$this->RequestActionWithBackOff($this->ReadPropertyInteger("SourceVariable"), $Value);
+				if ( ($Value == 0) || ($Value == 100) ) {
+					
+					$this->RequestActionWithBackOff($this->ReadPropertyInteger("SourceVariable"), $Value);
+				}
 				break;
 			default:
 				$this->LogMessage("An undefined compare mode was used","CRIT");
@@ -134,7 +137,36 @@ class TabletControlsSwitch extends IPSModule {
 	
 	public function RefreshInformation() {
 
-		SetValue($this->GetIdForIdent("Status"), GetValue($this->ReadPropertyInteger("SourceVariable") ) );
+		if ($this->GetIdForIdent("Status") != 1) {
+			
+			if (GetValue($this->ReadPropertyInteger("SourceVariable") ) {
+				
+				SetValue($this->GetIDForIdent("Status"), 100);
+			}
+			else {
+				
+				SetValue($this->GetIDForIdent("Status"), 0);
+			}
+		}
+		else {
+			
+			$variableDetails = IPS_GetVariable($this->GetIDForIdent("Status"));
+			$variableLastUpdated = $variableDetails['VariableUpdated'];
+			
+			$threshold = time() - 300;
+			
+			if ($variableLastUpdated < $threshold) {
+				
+				if (GetValue($this->ReadPropertyInteger("SourceVariable") ) {
+					
+					SetValue($this->GetIDForIdent("Status"), 100);
+				}
+				else {
+					
+					SetValue($this->GetIDForIdent("Status"), 0);
+				}	
+			}
+		}
 	}
 	
 	public function MessageSink($TimeStamp, $SenderId, $Message, $Data) {
@@ -150,6 +182,15 @@ class TabletControlsSwitch extends IPSModule {
 		$retries = 4;
 		$baseWait = 200;
 		
+		if ($value == 0) {
+			$targetValue = false;
+		}
+		if ($value == 100) {
+			$targetValue = true;
+		}
+		
+		SetValue($this->GetIDForIdent("Status"), 1);
+		
 		for ($i = 0; $i <= $retries; $i++) {
 			
 			$wait = $baseWait * $i;
@@ -160,11 +201,12 @@ class TabletControlsSwitch extends IPSModule {
 				IPS_Sleep($wait);
 			}
 			
-			$result = RequestAction($variable, $value);
+			$result = RequestAction($variable, $targetValue);
 			
 			// Return success if executed successfully
 			if ($result) {
 				
+				SetValue($this->GetIDForIdent("Status"), $value);
 				return true;
 			}
 			else {
