@@ -127,6 +127,7 @@ class TabletControlsSwitch extends IPSModule {
 			case "Status":
 				if ( ($Value == 0) || ($Value == 100) ) {
 					
+					SetValue($this->GetIDForIdent("Status"), 1);
 					$this->RequestActionWithBackOff($this->ReadPropertyInteger("SourceVariable"), $Value);
 				}
 				break;
