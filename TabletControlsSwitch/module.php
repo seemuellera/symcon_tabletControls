@@ -34,7 +34,7 @@ class TabletControlsSwitch extends IPSModule {
 		IPS_CreateVariableProfile($variableProfileTabCtrlSwitch, 1);
 		IPS_SetVariableProfileIcon($variableProfileTabCtrlSwitch, "Power");
 		IPS_SetVariableProfileAssociation($variableProfileTabCtrlSwitch, 100, "An", "", 0x00FF00);
-		IPS_SetVariableProfileAssociation($variableProfileTabCtrlSwitch, 99, "", "", 0xFFA500);
+		IPS_SetVariableProfileAssociation($variableProfileTabCtrlSwitch, 99, "/", "", 0xFFA500);
 		IPS_SetVariableProfileAssociation($variableProfileTabCtrlSwitch, 0, "Aus", "", -1);
 		
 		// Variables
