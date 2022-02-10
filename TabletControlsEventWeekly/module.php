@@ -27,7 +27,7 @@ class TabletControlsEventWeekly extends IPSModule {
 		$this->RegisterAttributeInteger("ObjectIdEvent",0);
 		
 		// Variables
-		$this->RegisterVariableInteger("Status","Status","~Switch");
+		$this->RegisterVariableBoolean("Status","Status","~Switch");
 		
 		// Timer
 		$this->RegisterTimer("RefreshInformation", 0 , 'TABCTRLEVWEEK_RefreshInformation($_IPS[\'TARGET\']);');
