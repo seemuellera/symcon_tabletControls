@@ -28,6 +28,9 @@ class TabletControlsEventWeekly extends IPSModule {
 		
 		// Variables
 		$this->RegisterVariableBoolean("Status","Status","~Switch");
+				
+		//Actions
+		$this->EnableAction("Status");
 		
 		// Timer
 		$this->RegisterTimer("RefreshInformation", 0 , 'TABCTRLEVWEEK_RefreshInformation($_IPS[\'TARGET\']);');
@@ -53,6 +56,8 @@ class TabletControlsEventWeekly extends IPSModule {
 				
 		// Add the buttons for the test center
 		$form['actions'][] = Array(	"type" => "Button", "label" => "Refresh", "onClick" => 'TABCTRLEVWEEK_RefreshInformation($id);');
+		$form['actions'][] = Array(	"type" => "Button", "label" => "Enable Event", "onClick" => 'TABCTRLEVWEEK_EnableEvent($id);');
+		$form['actions'][] = Array(	"type" => "Button", "label" => "Disable Event", "onClick" => 'TABCTRLEVWEEK_DisableEvent($id);');
 
 		
 		// Return the completed form
