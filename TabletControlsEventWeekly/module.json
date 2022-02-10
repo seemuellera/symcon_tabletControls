@@ -1,0 +1,14 @@
+{
+  "id": "{01AF486E-781E-4AB2-A0EB-838B05824104}",
+  "name": "TabletControlsEventWeekly",
+  "type": 3,
+  "vendor": "Andreas Seemueller",
+  "aliases": 
+  [
+	  "TabletControlsEventWeekly"
+  ],
+  "parentRequirements": [],
+  "childRequirements": [],
+  "implemented": [],
+  "prefix": "TABCTRLEVWEEK"
+}
