@@ -25,20 +25,8 @@ class TabletControlsSwitch extends IPSModule {
 		$this->RegisterPropertyInteger("SourceVariable",0);
 		$this->RegisterPropertyBoolean("ReadOnly",false);
 		
-		// Variable profiles
-		$variableProfileTabCtrlSwitch = "TABCTRL.Switch";
-		if (IPS_VariableProfileExists($variableProfileTabCtrlSwitch) ) {
-		
-			IPS_DeleteVariableProfile($variableProfileTabCtrlSwitch);
-		}			
-		IPS_CreateVariableProfile($variableProfileTabCtrlSwitch, 1);
-		IPS_SetVariableProfileIcon($variableProfileTabCtrlSwitch, "Power");
-		IPS_SetVariableProfileAssociation($variableProfileTabCtrlSwitch, 100, "An", "", 0x00FF00);
-		IPS_SetVariableProfileAssociation($variableProfileTabCtrlSwitch, 99, "/", "", 0xFFA500);
-		IPS_SetVariableProfileAssociation($variableProfileTabCtrlSwitch, 0, "Aus", "", -1);
-		
 		// Variables
-		$this->RegisterVariableInteger("Status","Status",$variableProfileTabCtrlSwitch);
+		$this->RegisterVariableBoolean("Status","Status","~Switch");
 		
 		// Timer
 		$this->RegisterTimer("RefreshInformation", 0 , 'TABCTRLSWITCH_RefreshInformation($_IPS[\'TARGET\']);');
@@ -125,11 +113,8 @@ class TabletControlsSwitch extends IPSModule {
 		switch ($Ident) {
 		
 			case "Status":
-				if ( ($Value == 0) || ($Value == 100) ) {
-					
-					SetValue($this->GetIDForIdent("Status"), 1);
-					$this->RequestActionWithBackOff($this->ReadPropertyInteger("SourceVariable"), $Value);
-				}
+				SetValue($this->GetIDForIdent("Status"), 1);
+				$this->RequestActionWithBackOff($this->ReadPropertyInteger("SourceVariable"), $Value);
 				break;
 			default:
 				$this->LogMessage("An undefined compare mode was used","CRIT");
@@ -138,35 +123,13 @@ class TabletControlsSwitch extends IPSModule {
 	
 	public function RefreshInformation() {
 
-		if ($this->GetIdForIdent("Status") != 1) {
+		if (GetValue($this->ReadPropertyInteger("SourceVariable")) ) {
 			
-			if (GetValue($this->ReadPropertyInteger("SourceVariable")) ) {
-				
-				SetValue($this->GetIDForIdent("Status"), 100);
-			}
-			else {
-				
-				SetValue($this->GetIDForIdent("Status"), 0);
-			}
+			SetValue($this->GetIDForIdent("Status"), true);
 		}
 		else {
 			
-			$variableDetails = IPS_GetVariable($this->GetIDForIdent("Status"));
-			$variableLastUpdated = $variableDetails['VariableUpdated'];
-			
-			$threshold = time() - 300;
-			
-			if ($variableLastUpdated < $threshold) {
-				
-				if (GetValue($this->ReadPropertyInteger("SourceVariable")) ) {
-					
-					SetValue($this->GetIDForIdent("Status"), 100);
-				}
-				else {
-					
-					SetValue($this->GetIDForIdent("Status"), 0);
-				}	
-			}
+			SetValue($this->GetIDForIdent("Status"), false);
 		}
 	}
 	
@@ -182,16 +145,7 @@ class TabletControlsSwitch extends IPSModule {
 		
 		$retries = 4;
 		$baseWait = 200;
-		
-		if ($value == 0) {
-			$targetValue = false;
-		}
-		if ($value == 100) {
-			$targetValue = true;
-		}
-		
-		SetValue($this->GetIDForIdent("Status"), 1);
-		
+			
 		for ($i = 0; $i <= $retries; $i++) {
 			
 			$wait = $baseWait * $i;
@@ -207,7 +161,6 @@ class TabletControlsSwitch extends IPSModule {
 			// Return success if executed successfully
 			if ($result) {
 				
-				SetValue($this->GetIDForIdent("Status"), $value);
 				return true;
 			}
 			else {
