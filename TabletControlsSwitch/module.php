@@ -156,7 +156,7 @@ class TabletControlsSwitch extends IPSModule {
 				IPS_Sleep($wait);
 			}
 			
-			$result = RequestAction($variable, $targetValue);
+			$result = RequestAction($variable, $value);
 			
 			// Return success if executed successfully
 			if ($result) {
