@@ -28,9 +28,13 @@ class TabletControlsEventWeekly extends IPSModule {
 		
 		// Variables
 		$this->RegisterVariableBoolean("Status","Status","~Switch");
+		$this->RegisterVariableInteger("StartTime","Start Time", "~UnixTimestampTime");
+		$this->RegisterVariableInteger("StopTime","Stop Time", "~UnixTimestampTime");
 				
 		//Actions
 		$this->EnableAction("Status");
+		$this->EnableAction("StartTime");
+		$this->EnableAction("StopTime");
 		
 		// Timer
 		$this->RegisterTimer("RefreshInformation", 0 , 'TABCTRLEVWEEK_RefreshInformation($_IPS[\'TARGET\']);');
@@ -111,6 +115,10 @@ class TabletControlsEventWeekly extends IPSModule {
 					$this->DisableEvent();
 				}
 				break;
+			case "StartTime":
+					SetValue($this->GetIDForIdent($Ident), $Value);
+			case "StopTime":
+				SetValue($this->GetIDForIdent($Ident), $Value);
 			default:
 				$this->LogMessage("An undefined compare mode was used","CRIT");
 		}
