@@ -136,7 +136,7 @@ class TabletControlsEventWeekly extends IPSModule {
 
 	public function DisableEvent() {
 		
-		IPS_SetEventActive($this->>ReadPropertyInteger("ObjectIdEvent"), false);
+		IPS_SetEventActive($this->ReadPropertyInteger("ObjectIdEvent"), false);
 		SetValue($this->GetIdForIdent("Status"), false);
 	}
 }
