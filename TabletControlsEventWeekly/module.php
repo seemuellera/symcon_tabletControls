@@ -22,9 +22,9 @@ class TabletControlsEventWeekly extends IPSModule {
 		$this->RegisterPropertyString("Sender","TabletControlsEventWeekly");
 		$this->RegisterPropertyBoolean("DebugOutput",false);
 		$this->RegisterPropertyInteger("RefreshInterval",0);
+		$this->RegisterPropertyInteger("ObjectIdEvent",0);
 		
 		// Attributes
-		$this->RegisterAttributeInteger("ObjectIdEvent",0);
 		
 		// Variables
 		$this->RegisterVariableBoolean("Status","Status","~Switch");
@@ -53,6 +53,7 @@ class TabletControlsEventWeekly extends IPSModule {
 		// Add the Elements
 		$form['elements'][] = Array("type" => "NumberSpinner", "name" => "RefreshInterval", "caption" => "Refresh Interval");
 		$form['elements'][] = Array("type" => "CheckBox", "name" => "DebugOutput", "caption" => "Enable Debug Output");
+		$form['elements'][] = Array("type" => "SelectEvent", "name" => "ObjectIdEvent", "caption" => "Select Target Event");
 				
 		// Add the buttons for the test center
 		$form['actions'][] = Array(	"type" => "Button", "label" => "Refresh", "onClick" => 'TABCTRLEVWEEK_RefreshInformation($id);');
@@ -70,17 +71,7 @@ class TabletControlsEventWeekly extends IPSModule {
 		
 		$newInterval = $this->ReadPropertyInteger("RefreshInterval") * 1000;
 		$this->SetTimerInterval("RefreshInformation", $newInterval);
-		
-		// Create event if it does not exist already
-		if ( ($this->ReadAttributeInteger("ObjectIdEvent") == 0) || (! IPS_ObjectExists($this->ReadAttributeInteger("ObjectIdEvent")) ) ) {
-		
-			$objectId = IPS_CreateEvent(2);
-			$this->WriteAttributeInteger("ObjectIdEvent", $objectId);
-			IPS_SetParent($objectId, $this->InstanceID);
-			
-			$this->LogMessage("Created event with Object ID $objectId");
-		}
-		
+				
 		// Diese Zeile nicht löschen
 		parent::ApplyChanges();
 	}
@@ -139,13 +130,13 @@ class TabletControlsEventWeekly extends IPSModule {
 	
 	public function EnableEvent() {
 		
-		IPS_SetEventActive($this->ReadAttributeInteger("ObjectIdEvent"), true);
+		IPS_SetEventActive($this->ReadPropertyInteger("ObjectIdEvent"), true);
 		SetValue($this->GetIdForIdent("Status"), true);
 	}
 
 	public function DisableEvent() {
 		
-		IPS_SetEventActive($this->ReadAttributeInteger("ObjectIdEvent"), false);
+		IPS_SetEventActive($this->>ReadPropertyInteger("ObjectIdEvent"), false);
 		SetValue($this->GetIdForIdent("Status"), false);
 	}
 }
