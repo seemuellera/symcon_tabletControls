@@ -194,9 +194,9 @@ class TabletControlsEventWeekly extends IPSModule {
 
 		$event = IPS_GetEvent($this->ReadPropertyInteger("ObjectIdEvent"));
 		
-		$startHour = $event["ScheduleGroups"][0][1]["Start"]["Hour"];
-		$startMinute = $event["ScheduleGroups"][0][1]["Start"]["Minute"];
-		$startSecond = $event["ScheduleGroups"][0][1]["Start"]["Second"];
+		$startHour = $event["ScheduleGroups"][0]["Points"][1]["Start"]["Hour"];
+		$startMinute = $event["ScheduleGroups"][0]["Points"][1]["Start"]["Minute"];
+		$startSecond = $event["ScheduleGroups"][0]["Points"][1]["Start"]["Second"];
 
 		$startTime = $startHour * 3600 + $startMinute * 60 + $startSecond;
 
