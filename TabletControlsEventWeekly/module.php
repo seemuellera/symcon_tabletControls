@@ -143,7 +143,7 @@ class TabletControlsEventWeekly extends IPSModule {
 
 		SetValue($this->GetIDForIdent("Status"), $this->GetEventState() );
 		SetValue($this->GetIDForIdent("StartTime"), $this->GetStartTime() );
-		SetValue($this->GetIDForIdent("EndTime"), $this->GetEndTime() );
+		SetValue($this->GetIDForIdent("StopTime"), $this->GetStopTime() );
 	}
 	
 	public function MessageSink($TimeStamp, $SenderId, $Message, $Data) {
@@ -204,16 +204,16 @@ class TabletControlsEventWeekly extends IPSModule {
 		return $startTime;
 	}	
 
-	protected function GetEndTime() {
+	protected function GetStopTime() {
 
 		$event = IPS_GetEvent($this->ReadPropertyInteger("ObjectIdEvent"));
 		
-		$endHour = $event["ScheduleGroups"][0]["Points"][2]["Start"]["Hour"];
-		$endMinute = $event["ScheduleGroups"][0]["Points"][2]["Start"]["Minute"];
-		$endSecond = $event["ScheduleGroups"][0]["Points"][2]["Start"]["Second"];
+		$stopHour = $event["ScheduleGroups"][0]["Points"][2]["Start"]["Hour"];
+		$stopMinute = $event["ScheduleGroups"][0]["Points"][2]["Start"]["Minute"];
+		$stopSecond = $event["ScheduleGroups"][0]["Points"][2]["Start"]["Second"];
 
-		$endTime = $endHour * 3600 + $endMinute * 60 + $endSecond;
+		$stopTime = $stopHour * 3600 + $stopMinute * 60 + $stopSecond;
 
-		return $endTime;
+		return $stopTime;
 	}
 }
