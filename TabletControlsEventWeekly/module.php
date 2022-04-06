@@ -140,6 +140,8 @@ class TabletControlsEventWeekly extends IPSModule {
 
 		SetValue($this->GetIDForIdent("NameAction1"), $nameAction1);
 		SetValue($this->GetIDForIdent("NameAction2"), $nameAction2);
+
+		SetValue($this->GetIDForIdent("Status"), $this->GetEventState() );
 	}
 	
 	public function MessageSink($TimeStamp, $SenderId, $Message, $Data) {
@@ -177,4 +179,13 @@ class TabletControlsEventWeekly extends IPSModule {
 
 		return false;
 	}
+
+	protected function GetEventState() {
+
+		$event = IPS_GetEvent($this->ReadPropertyInteger("ObjectIdEvent"));
+
+		$eventActive = $event["EventActive"];
+		
+		return $eventActive;
+	}	
 }
