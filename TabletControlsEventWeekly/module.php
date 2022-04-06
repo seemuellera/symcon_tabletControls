@@ -142,6 +142,7 @@ class TabletControlsEventWeekly extends IPSModule {
 		SetValue($this->GetIDForIdent("NameAction2"), $nameAction2);
 
 		SetValue($this->GetIDForIdent("Status"), $this->GetEventState() );
+		SetValue($this->GetIDForIdent("StartTime"), $this->GetStartTime() );
 	}
 	
 	public function MessageSink($TimeStamp, $SenderId, $Message, $Data) {
@@ -187,5 +188,18 @@ class TabletControlsEventWeekly extends IPSModule {
 		$eventActive = $event["EventActive"];
 		
 		return $eventActive;
+	}	
+
+	protected function GetStartTime() {
+
+		$event = IPS_GetEvent($this->ReadPropertyInteger("ObjectIdEvent"));
+		
+		$startHour = $event["ScheduleGroups"][0][1]["Start"]["Hour"];
+		$startMinute = $event["ScheduleGroups"][0][1]["Start"]["Minute"];
+		$startSecond = $event["ScheduleGroups"][0][1]["Start"]["Second"];
+
+		$startTime = $startHour * 3600 + $startMinute * 60 + $startSecond;
+
+		return $startTime;
 	}	
 }
