@@ -30,6 +30,8 @@ class TabletControlsEventWeekly extends IPSModule {
 		$this->RegisterVariableBoolean("Status","Status","~Switch");
 		$this->RegisterVariableInteger("StartTime","Start Time", "~UnixTimestampTime");
 		$this->RegisterVariableInteger("StopTime","Stop Time", "~UnixTimestampTime");
+		$this->RegisterVariableString("NameAction1","Name of Action 1");
+		$this->RegisterVariableString("NameAction2","Name of Action 2");
 				
 		//Actions
 		$this->EnableAction("Status");
@@ -127,6 +129,17 @@ class TabletControlsEventWeekly extends IPSModule {
 	public function RefreshInformation() {
 
 		$this->LogMessage("Refresh in progress","DEBUG");
+		$nameAction1 = $this->GetNameOfScheduleAction(1);
+		$nameAction2 = $this->GetNameOfScheduleAction(2);
+
+		if ( (! $nameAction1) || (! $nameAction2) ) {
+
+			$this->LogMessage("Unable to fetch names of the events","WARN");
+			return;
+		}
+
+		SetValue($this->GetIDForIdent("NameAction1"), $nameAction1);
+		SetValue($this->GetIDForIdent("NameAction2"), $nameAction2);
 	}
 	
 	public function MessageSink($TimeStamp, $SenderId, $Message, $Data) {
@@ -146,5 +159,22 @@ class TabletControlsEventWeekly extends IPSModule {
 		
 		IPS_SetEventActive($this->ReadPropertyInteger("ObjectIdEvent"), false);
 		SetValue($this->GetIdForIdent("Status"), false);
+	}
+
+	protected function GetNameOfScheduleAction(int $actionId) {
+
+		$event = IPS_GetEvent($this->ReadPropertyInteger("ObjectIdEvent"));
+
+		$scheduleActions = $event["ScheduleActions"];
+
+		foreach ($scheduleActions as $currentAction) {
+
+			if ($currentAction['ID'] == $actionId) {
+
+				return $currentAction['Name'];
+			}
+		}
+
+		return false;
 	}
 }
