@@ -115,6 +115,8 @@ class TabletControlsSwitch extends IPSModule {
 			case "Status":
 				SetValue($this->GetIDForIdent("Status"), 1);
 				$this->RequestActionWithBackOff($this->ReadPropertyInteger("SourceVariable"), $Value);
+				IPS_Sleep(500);
+				$this->RefreshInformation();
 				break;
 			default:
 				$this->LogMessage("An undefined compare mode was used","CRIT");
