@@ -39,6 +39,8 @@ class TabletControlsEventWeekly extends IPSModule {
 		$this->EnableAction("Status");
 		$this->EnableAction("StartTime");
 		$this->EnableAction("StopTime");
+		$this->EnableAction("TargetValueAction1");
+		$this->EnableAction("TargetValueAction2");
 		
 		// Timer
 		$this->RegisterTimer("RefreshInformation", 0 , 'TABCTRLEVWEEK_RefreshInformation($_IPS[\'TARGET\']);');
@@ -126,6 +128,14 @@ class TabletControlsEventWeekly extends IPSModule {
 			case "StopTime":
 				SetValue($this->GetIDForIdent($Ident), $Value);
 				$this->SetStopTime($Value);
+				break;
+			case "TargetValueAction1":
+				SetValue($this->GetIDForIdent($Ident), $Value);
+				$this->SetTargetValueOfScheduleAction(1, $Value);
+				break;
+			case "TargetValueAction2":
+				SetValue($this->GetIDForIdent($Ident), $Value);
+				$this->SetTargetValueOfScheduleAction(2, $Value);
 				break;
 			default:
 				$this->LogMessage("An undefined Ident was used","CRIT");
