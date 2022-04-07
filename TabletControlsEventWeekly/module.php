@@ -157,8 +157,8 @@ class TabletControlsEventWeekly extends IPSModule {
 			return;
 		}
 
-		SetValue($this->GetIDForIdent("TargetValueAction1"), $nameAction1);
-		SetValue($this->GetIDForIdent("TargetValueAction2"), $nameAction2);
+		SetValue($this->GetIDForIdent("TargetValueAction1"), $targetValueAction1);
+		SetValue($this->GetIDForIdent("TargetValueAction2"), $targetValueAction2);
 
 		SetValue($this->GetIDForIdent("Status"), $this->GetEventState() );
 		SetValue($this->GetIDForIdent("StartTime"), $this->GetStartTime() );
