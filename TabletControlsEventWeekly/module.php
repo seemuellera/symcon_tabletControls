@@ -202,7 +202,7 @@ class TabletControlsEventWeekly extends IPSModule {
 		$startMinute = $event["ScheduleGroups"][0]["Points"][1]["Start"]["Minute"];
 		$startSecond = $event["ScheduleGroups"][0]["Points"][1]["Start"]["Second"];
 
-		$startTime = $startHour * 3600 + $startMinute * 60 + $startSecond;
+		$startTime = mktime($startHour, $startMinute, $startSecond);
 
 		return $startTime;
 	}	
@@ -215,7 +215,7 @@ class TabletControlsEventWeekly extends IPSModule {
 		$stopMinute = $event["ScheduleGroups"][0]["Points"][2]["Start"]["Minute"];
 		$stopSecond = $event["ScheduleGroups"][0]["Points"][2]["Start"]["Second"];
 
-		$stopTime = $stopHour * 3600 + $stopMinute * 60 + $stopSecond;
+		$stopTime = mktime($stopHour, $stopMinute, $stopSecond);
 
 		return $stopTime;
 	}
@@ -223,16 +223,15 @@ class TabletControlsEventWeekly extends IPSModule {
 	public function SetStartTime(int $startTime) {
 
 		$eventId = $this->ReadPropertyInteger("ObjectIdEvent");
-
-		$startHour = floor($startTime / 3600);
-		$timeRemainingMinutes = $startTime % 3600;
-
-		$startMinute = floor($timeRemainingMinutes / 60);
-		$startSecond = $timeRemainingMinutes % 60;
-
 		$groupId = 0;
 		$pointId = 1;
 		$actionId = 2;
+
+		$data = getdate($startTime);
+
+		$startHour = $data['hours'];
+		$startMinute = $data['minutes'];
+		$startSecond = $data['seconds'];
 
 		$result = IPS_SetEventScheduleGroupPoint($eventId, $groupId, $pointId, $startHour, $startMinute, $startSecond, $actionId);
 
