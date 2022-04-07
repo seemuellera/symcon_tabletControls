@@ -123,6 +123,7 @@ class TabletControlsEventWeekly extends IPSModule {
 				break;
 			case "StopTime":
 				SetValue($this->GetIDForIdent($Ident), $Value);
+				$this->SetStopTime($Value);
 				break;
 			default:
 				$this->LogMessage("An undefined Ident was used","CRIT");
@@ -238,6 +239,27 @@ class TabletControlsEventWeekly extends IPSModule {
 		if (! $result) {
 
 			$this->LogMessage("Unable to set start time","CRIT");
+		}
+	}
+
+	public function SetStopTime(int $stopTime) {
+
+		$eventId = $this->ReadPropertyInteger("ObjectIdEvent");
+		$groupId = 0;
+		$pointId = 2;
+		$actionId = 1;
+
+		$data = getdate($stopTime);
+
+		$stopHour = $data['hours'];
+		$stopMinute = $data['minutes'];
+		$stopSecond = $data['seconds'];
+
+		$result = IPS_SetEventScheduleGroupPoint($eventId, $groupId, $pointId, $stopHour, $stopMinute, $stopSecond, $actionId);
+
+		if (! $result) {
+
+			$this->LogMessage("Unable to set stop time","CRIT");
 		}
 	}
 }
