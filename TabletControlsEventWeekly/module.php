@@ -32,6 +32,8 @@ class TabletControlsEventWeekly extends IPSModule {
 		$this->RegisterVariableInteger("StopTime","Stop Time", "~UnixTimestampTime");
 		$this->RegisterVariableString("NameAction1","Name of Action 1");
 		$this->RegisterVariableString("NameAction2","Name of Action 2");
+		$this->RegisterVariableInteger("TargetValueAction1","Target Value of Action 1");
+		$this->RegisterVariableInteger("TargetValueAction2","Target Value of Action 2");
 				
 		//Actions
 		$this->EnableAction("Status");
@@ -133,6 +135,7 @@ class TabletControlsEventWeekly extends IPSModule {
 	public function RefreshInformation() {
 
 		$this->LogMessage("Refresh in progress","DEBUG");
+		
 		$nameAction1 = $this->GetNameOfScheduleAction(1);
 		$nameAction2 = $this->GetNameOfScheduleAction(2);
 
@@ -144,6 +147,18 @@ class TabletControlsEventWeekly extends IPSModule {
 
 		SetValue($this->GetIDForIdent("NameAction1"), $nameAction1);
 		SetValue($this->GetIDForIdent("NameAction2"), $nameAction2);
+
+		$targetValueAction1 = $this->GetTargetValueOfScheduleAction(1);
+		$targetValueAction2 = $this->GetTargetValueOfScheduleAction(2);
+
+		if ( (! $targetValueAction1) || (! $targetValueAction2) ) {
+
+			$this->LogMessage("Unable to fetch target values of the event actions","WARN");
+			return;
+		}
+
+		SetValue($this->GetIDForIdent("TargetValueAction1"), $nameAction1);
+		SetValue($this->GetIDForIdent("TargetValueAction2"), $nameAction2);
 
 		SetValue($this->GetIDForIdent("Status"), $this->GetEventState() );
 		SetValue($this->GetIDForIdent("StartTime"), $this->GetStartTime() );
@@ -261,5 +276,22 @@ class TabletControlsEventWeekly extends IPSModule {
 
 			$this->LogMessage("Unable to set stop time","CRIT");
 		}
+	}
+
+	protected function GetTargetValueOfScheduleAction(int $actionId) {
+
+		$event = IPS_GetEvent($this->ReadPropertyInteger("ObjectIdEvent"));
+
+		$scheduleActions = $event["ScheduleActions"];
+
+		foreach ($scheduleActions as $currentAction) {
+
+			if ($currentAction['ID'] == $actionId) {
+
+				return $currentAction['ActionParameters']['VALUE'];
+			}
+		}
+
+		return false;
 	}
 }
