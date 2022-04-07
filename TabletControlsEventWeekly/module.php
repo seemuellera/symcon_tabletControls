@@ -294,4 +294,59 @@ class TabletControlsEventWeekly extends IPSModule {
 
 		return false;
 	}
+
+	protected function GetColorOfScheduleAction(int $actionId) {
+
+		$event = IPS_GetEvent($this->ReadPropertyInteger("ObjectIdEvent"));
+
+		$scheduleActions = $event["ScheduleActions"];
+
+		foreach ($scheduleActions as $currentAction) {
+
+			if ($currentAction['ID'] == $actionId) {
+
+				return $currentAction['Color'];
+			}
+		}
+
+		return false;
+	}
+
+	protected function GetActionIdOfScheduleAction(int $actionId) {
+
+		$event = IPS_GetEvent($this->ReadPropertyInteger("ObjectIdEvent"));
+
+		$scheduleActions = $event["ScheduleActions"];
+
+		foreach ($scheduleActions as $currentAction) {
+
+			if ($currentAction['ID'] == $actionId) {
+
+				return $currentAction['ActionID'];
+			}
+		}
+
+		return false;
+	}
+
+	protected function SetTargetValueOfScheduleAction(int $actionId, int $targetValue) {
+
+		$eventId = $this->ReadPropertyInteger("ObjectIdEvent");
+		$event = IPS_GetEvent($eventId);
+
+		$color = $this->GetColorOfScheduleAction($actionId);
+		$actionGuid = $this->GetActionIdOfScheduleAction($actionId);
+		$name = $this->GetNameOfScheduleAction($actionId);
+
+		$target = Array(
+			"VALUE" => $targetValue
+		);
+
+		$result = IPS_SetEventScheduleActionEx($eventId, $actionId, $name, $color, $actionGuid, $target);
+
+		if (! $result) {
+
+			$this->LogMessage("Unable to set target value $targetValue for Action $actionId","CRIT");
+		}
+	}
 }
