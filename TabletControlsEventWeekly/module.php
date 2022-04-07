@@ -118,12 +118,14 @@ class TabletControlsEventWeekly extends IPSModule {
 				}
 				break;
 			case "StartTime":
-					SetValue($this->GetIDForIdent($Ident), $Value);
-					$this->SetStartTime($Value);
+				SetValue($this->GetIDForIdent($Ident), $Value);
+				$this->SetStartTime($Value);
+				break;
 			case "StopTime":
 				SetValue($this->GetIDForIdent($Ident), $Value);
+				break;
 			default:
-				$this->LogMessage("An undefined compare mode was used","CRIT");
+				$this->LogMessage("An undefined Ident was used","CRIT");
 		}
 	}
 	
