@@ -119,6 +119,7 @@ class TabletControlsEventWeekly extends IPSModule {
 				break;
 			case "StartTime":
 					SetValue($this->GetIDForIdent($Ident), $Value);
+					$this->SetStartTime($Value);
 			case "StopTime":
 				SetValue($this->GetIDForIdent($Ident), $Value);
 			default:
@@ -215,5 +216,27 @@ class TabletControlsEventWeekly extends IPSModule {
 		$stopTime = $stopHour * 3600 + $stopMinute * 60 + $stopSecond;
 
 		return $stopTime;
+	}
+
+	public function SetStartTime(int $startTime) {
+
+		$eventId = $this->ReadPropertyInteger("ObjectIdEvent");
+
+		$startHour = floor($startTime / 3600);
+		$timeRemainingMinutes = $startTime % 3600;
+
+		$startMinute = floor($timeRemainingMinutes / 60);
+		$startSecond = $timeRemainingMinutes % 60;
+
+		$groupId = 0;
+		$pointId = 1;
+		$actionId = 2;
+
+		$result = IPS_SetEventScheduleGroupPoint($eventId, $groupId, $pointId, $startHour, $startMinute, $startSecond, $actionId);
+
+		if (! $result) {
+
+			$this->LogMessage("Unable to set start time","CRIT");
+		}
 	}
 }
