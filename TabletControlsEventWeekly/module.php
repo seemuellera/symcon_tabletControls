@@ -161,11 +161,13 @@ class TabletControlsEventWeekly extends IPSModule {
 		$targetValueAction1 = $this->GetTargetValueOfScheduleAction(1);
 		$targetValueAction2 = $this->GetTargetValueOfScheduleAction(2);
 
+		/* Deactivating this as false is a valid target value:
 		if ( (! $targetValueAction1) || (! $targetValueAction2) ) {
 
 			$this->LogMessage("Unable to fetch target values of the event actions","WARN");
 			return;
 		}
+		*/
 
 		SetValue($this->GetIDForIdent("TargetValueAction1"), $targetValueAction1);
 		SetValue($this->GetIDForIdent("TargetValueAction2"), $targetValueAction2);
