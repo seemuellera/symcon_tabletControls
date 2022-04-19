@@ -1,0 +1,14 @@
+{
+  "id": "{A1F7D547-7D43-45FC-B46E-15B8E00AC5B5}",
+  "name": "TabletControlsEventDaily",
+  "type": 3,
+  "vendor": "Andreas Seemueller",
+  "aliases": 
+  [
+	  "TabletControlsEventDaily"
+  ],
+  "parentRequirements": [],
+  "childRequirements": [],
+  "implemented": [],
+  "prefix": "TABCTRLEVDAY"
+}
