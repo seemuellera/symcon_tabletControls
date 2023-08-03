@@ -85,7 +85,7 @@ class TabletControlsEventDaily extends IPSModule {
 		$messagesList = $this->GetMessageList();
 		foreach ($messagesList as $currentMessage) {
 
-			$this->UnregisterMessage($currentMessage, VM_CHANGE);
+			$this->UnregisterMessage($currentMessage, VM_UPDATE);
 		}				
 		// Diese Zeile nicht löschen
 		parent::ApplyChanges();
